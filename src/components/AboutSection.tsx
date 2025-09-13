@@ -26,14 +26,6 @@ const AboutSection = () => {
       color: "text-dccs-blue",
       bgColor: "bg-dccs-blue/10",
       description: "Developing critical thinking and character"
-    },
-    {
-      title: "Online High School",
-      ages: "Grades 8–12",
-      icon: Globe,
-      color: "text-dccs-red",
-      bgColor: "bg-dccs-red/10",
-      description: "Flexible, quality education with Christian values"
     }
   ];
 
@@ -49,7 +41,7 @@ const AboutSection = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {schoolPhases.map((phase, index) => {
           const IconComponent = phase.icon;
           return (

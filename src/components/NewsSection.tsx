@@ -13,8 +13,8 @@ const NewsSection = () => {
     },
     {
       date: "2024-05-15",
-      title: "New Online High School Launch",
-      description: "We are excited to announce our new Online High School for Grades 8–12. Quality education with flexibility and Christian values.",
+      title: "New Educational Programs",
+      description: "We are excited to announce new educational programs and initiatives to enhance our students' learning experience.",
       category: "Announcement",
       featured: true
     },
@@ -111,10 +111,15 @@ const NewsSection = () => {
                 {item.description}
               </p>
               
-              <div className="flex items-center text-dccs-blue-light hover:text-dccs-blue cursor-pointer transition-colors">
+              <a 
+                href="https://www.facebook.com/officialdccschool/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center text-dccs-blue-light hover:text-dccs-blue transition-colors"
+              >
                 <span className="text-sm font-medium mr-2">Read more</span>
                 <ExternalLink className="h-4 w-4" />
-              </div>
+              </a>
             </CardContent>
           </Card>
         ))}
