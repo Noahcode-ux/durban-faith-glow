@@ -8,11 +8,16 @@ const Footer = () => {
           Durban Christian Centre School &copy; 2024. All Rights Reserved.
         </div>
         
-        <div className="flex items-center justify-center text-white/80 text-sm">
+        <a 
+          href="https://github.com/noahcode-ux" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="flex items-center justify-center text-white/80 text-sm hover:text-white transition-colors duration-300 hover:scale-105 transform"
+        >
           <span>Website made with</span>
           <Heart className="h-4 w-4 mx-1 text-dccs-red fill-current" />
           <span>by Noah Sangweni</span>
-        </div>
+        </a>
         
         <div className="pt-4 border-t border-white/20">
           <p className="text-white/60 text-sm">
