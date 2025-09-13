@@ -1,52 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, ExternalLink } from "lucide-react";
+import { Calendar, ExternalLink, Loader2 } from "lucide-react";
+import { useFacebookPosts } from "@/hooks/useFacebookPosts";
 
 const NewsSection = () => {
-  const newsItems = [
-    {
-      date: "2024-06-01",
-      title: "Open Day 2024",
-      description: "Join us for our Open Day! Meet our teachers, tour the campus, and discover what makes DCCS special. Experience our vibrant learning community firsthand.",
-      category: "Event",
-      featured: true
-    },
-    {
-      date: "2024-05-15",
-      title: "New Educational Programs",
-      description: "We are excited to announce new educational programs and initiatives to enhance our students' learning experience.",
-      category: "Announcement",
-      featured: true
-    },
-    {
-      date: "2024-04-20",
-      title: "Term 2 Newsletter",
-      description: "Read our latest newsletter for updates on student achievements, upcoming events, and community highlights.",
-      category: "Newsletter",
-      featured: false
-    },
-    {
-      date: "2024-03-15",
-      title: "Sports Day Success",
-      description: "Our annual sports day was a tremendous success with students showcasing their athletic talents and team spirit.",
-      category: "Event",
-      featured: false
-    },
-    {
-      date: "2024-02-28",
-      title: "Academic Excellence Awards",
-      description: "Celebrating our students' outstanding academic achievements in the first term. Congratulations to all our award recipients!",
-      category: "Achievement",
-      featured: false
-    },
-    {
-      date: "2024-02-10",
-      title: "New Learning Resources",
-      description: "We've invested in new educational technology and resources to enhance our students' learning experience.",
-      category: "Update",
-      featured: false
-    }
-  ];
+  const { posts, loading, error } = useFacebookPosts();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -55,6 +13,15 @@ const NewsSection = () => {
       month: 'short', 
       year: 'numeric' 
     });
+  };
+
+  const getPostCategory = (message?: string, story?: string) => {
+    const content = (message || story || '').toLowerCase();
+    if (content.includes('open day') || content.includes('event')) return 'Event';
+    if (content.includes('newsletter')) return 'Newsletter';
+    if (content.includes('award') || content.includes('achievement')) return 'Achievement';
+    if (content.includes('new') || content.includes('launch')) return 'Announcement';
+    return 'Update';
   };
 
   const getCategoryColor = (category: string) => {
@@ -68,6 +35,11 @@ const NewsSection = () => {
     return colors[category as keyof typeof colors] || "bg-gray-500 text-white";
   };
 
+  const truncateMessage = (message: string, maxLength: number = 150) => {
+    if (message.length <= maxLength) return message;
+    return message.substring(0, maxLength).trim() + '...';
+  };
+
   return (
     <section id="news" className="space-y-8">
       <div className="glass-card rounded-2xl p-8 text-center animate-fade-in">
@@ -79,51 +51,77 @@ const NewsSection = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {newsItems.map((item, index) => (
-          <Card 
-            key={`${item.date}-${item.title}`}
-            className={`glass-card border-0 hover:scale-105 transition-all duration-300 hover:shadow-2xl animate-slide-up ${
-              item.featured ? 'md:col-span-2 lg:col-span-1' : ''
-            }`}
-            style={{ animationDelay: `${index * 0.1}s` }}
-          >
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center space-x-2 text-white/70">
-                  <Calendar className="h-4 w-4" />
-                  <time dateTime={item.date} className="text-sm font-medium">
-                    {formatDate(item.date)}
-                  </time>
-                </div>
-                <Badge className={getCategoryColor(item.category)}>
-                  {item.category}
-                </Badge>
-              </div>
-              
-              <CardTitle className="text-xl font-bold text-white hover:text-dccs-yellow transition-colors">
-                {item.title}
-              </CardTitle>
-            </CardHeader>
+      {loading && (
+        <div className="flex justify-center items-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
+          <span className="ml-2 text-white">Loading Facebook posts...</span>
+        </div>
+      )}
+
+      {error && (
+        <div className="glass-card rounded-2xl p-6 text-center">
+          <p className="text-white/80">
+            {error.includes('access token') 
+              ? 'Facebook integration not configured yet. Showing sample posts.' 
+              : 'Unable to load Facebook posts. Showing fallback content.'
+            }
+          </p>
+        </div>
+      )}
+
+      {!loading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts.map((post, index) => {
+            const message = post.message || post.story || 'No content available';
+            const category = getPostCategory(post.message, post.story);
+            const isFirstTwo = index < 2;
             
-            <CardContent>
-              <p className="text-white/80 leading-relaxed mb-4">
-                {item.description}
-              </p>
-              
-              <a 
-                href="https://www.facebook.com/officialdccschool/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center text-dccs-blue-light hover:text-dccs-blue transition-colors"
+            return (
+              <Card 
+                key={post.id}
+                className={`glass-card border-0 hover:scale-105 transition-all duration-300 hover:shadow-2xl animate-slide-up ${
+                  isFirstTwo ? 'md:col-span-2 lg:col-span-1' : ''
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <span className="text-sm font-medium mr-2">Read more</span>
-                <ExternalLink className="h-4 w-4" />
-              </a>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                <CardHeader className="pb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center space-x-2 text-white/70">
+                      <Calendar className="h-4 w-4" />
+                      <time dateTime={post.created_time} className="text-sm font-medium">
+                        {formatDate(post.created_time)}
+                      </time>
+                    </div>
+                    <Badge className={getCategoryColor(category)}>
+                      {category}
+                    </Badge>
+                  </div>
+                  
+                  <CardTitle className="text-xl font-bold text-white hover:text-dccs-yellow transition-colors">
+                    {category}: Latest Update
+                  </CardTitle>
+                </CardHeader>
+                
+                <CardContent>
+                  <p className="text-white/80 leading-relaxed mb-4">
+                    {truncateMessage(message)}
+                  </p>
+                  
+                  <a 
+                    href={post.permalink_url}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center text-dccs-blue-light hover:text-dccs-blue transition-colors"
+                  >
+                    <span className="text-sm font-medium mr-2">Read more on Facebook</span>
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 };
