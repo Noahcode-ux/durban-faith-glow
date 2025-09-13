@@ -18,9 +18,15 @@ const Header = ({ currentSection, setCurrentSection }: HeaderProps) => {
     { id: "contact", label: "Contact" },
   ];
 
-  const scrollToSection = (sectionId: string) => {
+  const handleNavigation = (sectionId: string) => {
     setCurrentSection(sectionId);
     setIsMobileMenuOpen(false);
+    
+    if (sectionId === "news") {
+      // Open Facebook page in new tab
+      window.open("https://www.facebook.com/officialdccschool/", "_blank");
+      return;
+    }
     
     // Smooth scroll to section
     const element = document.getElementById(sectionId);
@@ -52,7 +58,7 @@ const Header = ({ currentSection, setCurrentSection }: HeaderProps) => {
             <Button
               key={item.id}
               variant={currentSection === item.id ? "secondary" : "ghost"}
-              onClick={() => scrollToSection(item.id)}
+              onClick={() => handleNavigation(item.id)}
               className="text-white hover:bg-white/20 transition-all duration-300 hover:scale-105"
             >
               {item.label}
@@ -79,7 +85,7 @@ const Header = ({ currentSection, setCurrentSection }: HeaderProps) => {
               <Button
                 key={item.id}
                 variant={currentSection === item.id ? "secondary" : "ghost"}
-                onClick={() => scrollToSection(item.id)}
+                onClick={() => handleNavigation(item.id)}
                 className="text-white hover:bg-white/20 justify-center"
               >
                 {item.label}
@@ -91,7 +97,7 @@ const Header = ({ currentSection, setCurrentSection }: HeaderProps) => {
         {/* CTA and Contact Info */}
         <div className="text-center space-y-3">
           <Button
-            onClick={() => scrollToSection("admissions")}
+            onClick={() => handleNavigation("admissions")}
             className="bg-gradient-to-r from-dccs-red to-dccs-yellow hover:from-dccs-red-light hover:to-dccs-yellow-light text-white font-bold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
             Enrol Now
