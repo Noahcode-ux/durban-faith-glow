@@ -62,7 +62,6 @@
         .card p { color: rgba(255, 255, 255, 0.9); text-align: left; }
         .pre-primary .card-icon { background: hsl(var(--dccs-yellow)); }
         .primary .card-icon { background: hsl(var(--dccs-blue)); }
-        .high-school .card-icon { background: hsl(var(--dccs-red)); }
         .admissions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
         .step-card { padding: 1.5rem; text-align: center; }
         .step-number { width: 40px; height: 40px; background: hsl(var(--dccs-blue)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-weight: bold; }
@@ -97,6 +96,23 @@
         html { scroll-behavior: smooth; }
         .fade-in { opacity: 0; transform: translateY(20px); transition: all 0.6s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        .facebook-button {
+            background-color: #1877f2;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .facebook-button:hover {
+            background-color: #166fe5;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -104,7 +120,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo-section">
-                    <div class="logo">DCCS</div>
+                    <img src="https://dccschool.co.za/wp-content/uploads/2021/08/logo.png" alt="Durban Christian Centre School Logo" style="width: 60px; height: auto; border-radius: 50%; background: white; padding: 5px;">
                     <div class="school-name">Durban Christian Centre School</div>
                 </div>
                 <nav class="nav">
@@ -148,13 +164,10 @@
                     <div class="age-range">Ages 6-13</div>
                     <p>Our Primary School curriculum combines academic excellence with character formation, preparing students for secondary education while instilling Christian values.</p>
                 </div>
-                <div class="card glass-card high-school">
-                    <div class="card-icon">🎓</div>
-                    <h3>High School</h3>
-                    <div class="age-range">Ages 13-18</div>
-                    <p>Our High School program offers comprehensive education including online learning options, preparing students for tertiary education and future careers.</p>
-                </div>
             </div>
+            <a href="https://www.facebook.com/officialdccschool/" target="_blank" class="facebook-button">
+                Find us on Facebook
+            </a>
         </section>
         <section id="admissions" class="section glass-card fade-in">
             <h2>Admissions Process</h2>
